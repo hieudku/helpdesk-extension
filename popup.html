@@ -5,10 +5,14 @@
     <link rel="stylesheet" href="popup.css">
   </head>
   <body>
-    <h3>Login</h3>
-    <input id="email" type="text" placeholder="Email" />
-    <input id="password" type="password" placeholder="Password" />
-    <button id="loginBtn">Login</button>
+    <h3 id="loginTitle">Login</h3>
+        <div id="loginSection">
+        <input id="email" type="text" placeholder="Email" />
+        <input id="password" type="password" placeholder="Password" />
+        <button id="loginBtn">Login</button>
+        </div>
+        <!-- Message shown after login -->
+<div id="welcomeMsg" style="display: none; font-weight: bold; margin: 8px 0; color: #0078d7;"></div>
 
     <h3>Ask HelpdeskAI</h3>
     <textarea id="input" placeholder="Type your question..." disabled></textarea>

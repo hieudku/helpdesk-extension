@@ -17,17 +17,27 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
-      credentials: "include" // IMPORTANT: save the cookie
+      credentials: "include"
     });
 
     if (!res.ok) throw new Error("HTTP " + res.status);
 
-    output.textContent = "Login successful!";
     loggedIn = true;
+
+    // Hide login form
+    document.getElementById("loginSection").style.display = "none";
+    document.getElementById("loginTitle").style.display = "none";
+
+    // Show welcome message
+    const welcomeMsg = document.getElementById("welcomeMsg");
+    welcomeMsg.textContent = `Hi, ${email}`;
+    welcomeMsg.style.display = "block";
 
     // Enable chat
     document.getElementById("input").disabled = false;
     document.getElementById("sendBtn").disabled = false;
+
+    output.textContent = ""; // clear old messages
   } catch (err) {
     output.textContent = "Login error: " + err.message;
   }
@@ -44,7 +54,7 @@ document.getElementById("sendBtn").addEventListener("click", async () => {
   }
   if (!input) return;
 
-  output.textContent = "⏳ Loading...";
+  output.textContent = "Loading...";
 
   try {
     const res = await fetch(`${BASE_URL}/chat/completions`, {
