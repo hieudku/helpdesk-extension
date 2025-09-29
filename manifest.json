@@ -1,0 +1,16 @@
+{
+  "name": "HelpdeskAI",
+  "description": "Ask HelpdeskAI via school backend",
+  "version": "1.0",
+  "manifest_version": 3,
+  "permissions": ["storage"],
+  "host_permissions": [
+    "http://10.200.108.66:8080/*"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
