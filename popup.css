@@ -2,7 +2,7 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: #f4f6f9;
   padding: 15px;
-  width: 320px;
+  width: 420px;
   color: #333;
   box-sizing: border-box;
 }
@@ -15,26 +15,15 @@ h3 {
   padding-bottom: 4px;
 }
 
-input,
-button {
-  font-size: 14px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  padding: 10px;
-}
-
-input {
-  width: 100%;
-  margin: 6px 0;
-}
-
 button {
   font-weight: bold;
   background: linear-gradient(90deg, #0078d7, #005a9e);
   color: #fff;
   cursor: pointer;
   transition: background 0.2s ease-in-out;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
 }
 
 button:hover:enabled {
@@ -96,4 +85,14 @@ button:disabled {
 
 #input {
   flex: 1;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.chatControls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
 }

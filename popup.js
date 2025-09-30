@@ -1,5 +1,4 @@
 const BASE_URL = "http://10.200.108.66:8080/api/v1";
-let loggedIn = false;
 
 // Restore chat history when popup opens
 document.addEventListener("DOMContentLoaded", () => {
@@ -25,62 +24,11 @@ function updateChatWindow(content) {
   chrome.storage.local.set({ chatHistory: chatWindow.innerHTML });
 }
 
-// Login
-document.getElementById("loginBtn").addEventListener("click", async () => {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-
-  if (!email || !password) {
-    updateChatWindow(
-      `<div class="message error">Please enter email and password.</div>`
-    );
-    return;
-  }
-
-  try {
-    const res = await fetch(`${BASE_URL}/auths/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-      credentials: "include",
-    });
-
-    if (!res.ok) throw new Error("HTTP " + res.status);
-
-    loggedIn = true;
-
-    // Hide login form
-    document.getElementById("loginSection").style.display = "none";
-    document.getElementById("loginTitle").style.display = "none";
-
-    // Show welcome
-    const welcomeMsg = document.getElementById("welcomeMsg");
-    welcomeMsg.textContent = `Hi, ${email}`;
-    welcomeMsg.style.display = "block";
-
-    // Enable chat
-    document.getElementById("input").disabled = false;
-    document.getElementById("sendBtn").disabled = false;
-
-    updateChatWindow(
-      `<div class="message bot"> Logged in successfully.</div>`
-    );
-  } catch (err) {
-    updateChatWindow(
-      `<div class="message error">Login error: ${err.message}</div>`
-    );
-  }
-});
-
 // Send message
 async function sendMessage() {
   const inputField = document.getElementById("input");
   const input = inputField.value.trim();
 
-  if (!loggedIn) {
-    updateChatWindow(`<div class="message error">Please login first.</div>`);
-    return;
-  }
   if (!input) return;
 
   // Append user message
@@ -120,4 +68,17 @@ document.getElementById("input").addEventListener("keypress", (e) => {
     e.preventDefault();
     sendMessage();
   }
+});
+
+// New Chat (keeps storage, just adds divider)
+document.getElementById("newChatBtn").addEventListener("click", () => {
+  updateChatWindow(
+    `<div class="message bot" style="text-align:center; width:100%; background:#eee; color:#555; border-radius:6px;">--- New Chat ---</div>`
+  );
+});
+
+// Clear Chat (wipe everything)
+document.getElementById("clearChatBtn").addEventListener("click", () => {
+  document.getElementById("chatWindow").innerHTML = "";
+  chrome.storage.local.remove("chatHistory");
 });

@@ -5,33 +5,21 @@
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <h3 id="loginTitle">Login</h3>
-    <div id="loginSection">
-      <input id="email" type="text" placeholder="Email" />
-      <input id="password" type="password" placeholder="Password" />
-      <button id="loginBtn">Login</button>
-    </div>
-
-    <!-- Message shown after login -->
-    <div
-      id="welcomeMsg"
-      style="display: none; font-weight: bold; margin: 8px 0; color: #0078d7"
-    ></div>
-
     <h3>Ask HelpdeskAI</h3>
 
     <!-- Chat Window -->
     <div id="chatWindow"></div>
 
+    <!-- Chat Controls -->
+    <div class="chatControls">
+      <button id="newChatBtn">New Chat</button>
+      <button id="clearChatBtn">Clear Chat</button>
+    </div>
+
     <!-- Input Row -->
     <div class="inputRow">
-      <input
-        id="input"
-        type="text"
-        placeholder="Type your question..."
-        disabled
-      />
-      <button id="sendBtn" disabled>Send</button>
+      <input id="input" type="text" placeholder="Type your question..." />
+      <button id="sendBtn">Send</button>
     </div>
 
     <script src="popup.js"></script>
