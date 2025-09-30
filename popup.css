@@ -15,32 +15,82 @@ h3 {
   padding-bottom: 4px;
 }
 
+/* Login box */
+#loginContainer {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+#loginSection label {
+  display: block;
+  font-size: 13px;
+  color: #555;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+#loginSection input[type="text"],
+#loginSection input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+#loginSection input:focus {
+  border-color: #0078d7;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 120, 215, 0.3);
+}
+
+#loginBtn {
+  width: 100%;
+  margin-top: 10px;
+  background: linear-gradient(90deg, #0078d7, #005a9e);
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#loginBtn:hover {
+  background: linear-gradient(90deg, #005a9e, #00447a);
+}
+
+.rememberRow {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  margin-top: -5px;
+}
+
+.rememberRow input {
+  margin-right: 6px;
+}
+
 #statusBar {
   font-size: 12px;
   color: #28a745;
   margin-bottom: 6px;
 }
 
-button {
-  font-weight: bold;
-  background: linear-gradient(90deg, #0078d7, #005a9e);
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.2s ease-in-out;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 12px;
+button.smallBtn {
+  font-size: 12px;
+  padding: 4px 8px;
+  margin-left: 8px;
 }
 
-button:hover:enabled {
-  background: linear-gradient(90deg, #005a9e, #00447a);
-}
-
-button:disabled {
-  background-color: #aaa;
-  cursor: not-allowed;
-}
-
+/* Chat styling remains unchanged below */
 #chatWindow {
   margin-top: 12px;
   padding: 10px;
@@ -114,4 +164,41 @@ button:disabled {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* button style */
+button {
+  font-weight: bold;
+  background: linear-gradient(90deg, #0078d7, #005a9e);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+button:hover:enabled {
+  background: linear-gradient(90deg, #005a9e, #00447a);
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Small buttons - Logout */
+button.smallBtn {
+  font-size: 12px;
+  padding: 6px 10px;
+  margin-left: 8px;
+}
+
+/* Full width for Login button */
+#loginBtn {
+  width: 100%;
+  margin-top: 10px;
 }

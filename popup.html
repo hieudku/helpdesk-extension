@@ -5,9 +5,29 @@
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <h3>Ask HelpdeskAI</h3>
+    <!-- Login -->
+    <div id="loginContainer">
+      <h3 id="loginTitle">Login</h3>
+      <div id="loginSection">
+        <label for="email">Email</label>
+        <input id="email" type="text" placeholder="Enter your email" />
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter your password" />
+        <div class="rememberRow">
+          <input type="checkbox" id="rememberMe" />
+          <label for="rememberMe">Remember me</label>
+        </div>
+        <button id="loginBtn">Login</button>
+      </div>
+    </div>
 
-    <!-- Status -->
+    <!-- Welcome -->
+    <div id="welcomeBar" style="display: none; margin-bottom: 10px;">
+      <span id="welcomeMsg" style="font-weight: bold; color: #0078d7;"></span>
+      <button id="logoutBtn" class="smallBtn">Logout</button>
+    </div>
+
+    <h3>Ask HelpdeskAI</h3>
     <div id="statusBar">Connected to HelpdeskAI</div>
 
     <!-- Chat Window -->
@@ -25,8 +45,9 @@
         id="input"
         placeholder="Type your question..."
         rows="1"
+        disabled
       ></textarea>
-      <button id="sendBtn">Send</button>
+      <button id="sendBtn" disabled>Send</button>
     </div>
 
     <script src="popup.js"></script>
