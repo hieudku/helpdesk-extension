@@ -40,6 +40,14 @@ body {
   margin: 8px 12px;
 }
 
+#statusBarLogout {
+  display: flex;
+  justify-content:space-between;
+  gap: 10px;
+  margin-right: 10px;
+  margin-top: 7px;
+}
+
 /* Chat Window */
 #chatWindow {
   margin: 10px 12px;
@@ -234,6 +242,34 @@ body.dark-mode .message.bot {
   color: #eee;
 }
 
+body.dark-mode .inputRow {
+  background: #2a2a2a;
+}
+
+#input {
+  flex: 1;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;  
+  padding: 8px;
+  resize: none;
+  background: transparent; 
+  color: #333;
+}
+
+body.dark-mode #input {
+  color: #eee;
+}
+
+body.dark-mode #input {
+  background: #2a2a2a;
+  color: #eee;
+  border: 1px solid #555;
+}
+
+body.dark-mode #input::placeholder {
+  color: #aaa;
+}
 
 
 /* =====================
