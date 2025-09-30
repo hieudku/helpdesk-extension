@@ -2,23 +2,53 @@
 <html>
   <head>
     <title>HelpdeskAI</title>
-    <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <h3 id="loginTitle">Login</h3>
-        <div id="loginSection">
-        <input id="email" type="text" placeholder="Email" />
-        <input id="password" type="password" placeholder="Password" />
-        <button id="loginBtn">Login</button>
+    <!-- Login -->
+    <div id="loginContainer">
+      <h3 id="loginTitle">Login</h3>
+      <div id="loginSection">
+        <label for="email">Email</label>
+        <input id="email" type="text" placeholder="Enter your email" />
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter your password" />
+        <div class="rememberRow">
+          <input type="checkbox" id="rememberMe" />
+          <label for="rememberMe">Remember me</label>
         </div>
-        <!-- Message shown after login -->
-<div id="welcomeMsg" style="display: none; font-weight: bold; margin: 8px 0; color: #0078d7;"></div>
+        <button id="loginBtn">Login</button>
+      </div>
+    </div>
+
+    <!-- Welcome -->
+    <div id="welcomeBar" style="display: none; margin-bottom: 10px;">
+      <span id="welcomeMsg" style="font-weight: bold; color: #0078d7;"></span>
+      <button id="logoutBtn" class="smallBtn">Logout</button>
+    </div>
 
     <h3>Ask HelpdeskAI</h3>
-    <textarea id="input" placeholder="Type your question..." disabled></textarea>
-    <button id="sendBtn" disabled>Send</button>
+    <div id="statusBar">Connected to HelpdeskAI</div>
 
-    <div id="output">Output will appear here...</div>
+    <!-- Chat Window -->
+    <div id="chatWindow"></div>
+
+    <!-- Chat Controls -->
+    <div class="chatControls">
+      <button id="newChatBtn">New Chat</button>
+      <button id="clearChatBtn">Clear Chat</button>
+    </div>
+
+    <!-- Input Row -->
+    <div class="inputRow">
+      <textarea
+        id="input"
+        placeholder="Type your question..."
+        rows="1"
+        disabled
+      ></textarea>
+      <button id="sendBtn" disabled>Send</button>
+    </div>
 
     <script src="popup.js"></script>
   </body>
