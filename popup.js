@@ -24,7 +24,7 @@ function updateChatWindow(role, text) {
   const messageHTML = `
     <div class="messageRow ${role}">
       ${role === "bot" ? avatarHTML : ""}
-      <div>
+      <div class="bubbleWrapper">
         <div class="message ${role}">${text}</div>
         <div class="timestamp">${time}</div>
       </div>
@@ -38,6 +38,7 @@ function updateChatWindow(role, text) {
   // persist
   chrome.storage.local.set({ chatHistory: chatWindow.innerHTML });
 }
+
 
 // --- Show logged in UI ---
 function showLoggedInUI(email) {

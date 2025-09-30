@@ -57,11 +57,29 @@ body {
   border: 1px solid #e1e1e1;
   border-radius: 10px;
   background: #fafafa;
-  height: 260px;
+  height: 300px;
   overflow-y: auto;
   font-size: 14px;
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
 }
+
+/* Wraps bubble + timestamp */
+.bubbleWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.messageRow.user .bubbleWrapper {
+  align-items: flex-end; /* timestamp right under user bubbles */
+}
+
+.timestamp {
+  font-size: 10px;
+  color: #999;
+  margin-top: 2px;
+}
+
 
 /* =====================
    CHAT CONTROLS
