@@ -185,6 +185,36 @@ button:disabled {
   transform: none;
 }
 
+/* send btn */
+#sendBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #0078d7, #005a9e);
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+#sendBtn img.send-icon {
+  width: 18px;   
+  height: 18px;
+  object-fit: contain;
+}
+
+#sendBtn:hover:enabled {
+  background: linear-gradient(90deg, #005a9e, #00447a);
+  transform: translateY(-1px);
+}
+
+#sendBtn:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
 /* =====================
    SUN/MOON TOGGLE
    ===================== */
