@@ -7,44 +7,39 @@ function scrollChatToBottom() {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-function renderMessage(content, sender = "bot") {
+// --- Unified chat renderer ---
+function updateChatWindow(role, text) {
   const chatWindow = document.getElementById("chatWindow");
+  const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-  const row = document.createElement("div");
-  row.className = `messageRow ${sender}`;
-
-  // avatar
-  const avatar = document.createElement("div");
-  avatar.className = "avatar";
-  avatar.textContent = sender === "user" ? "You" : "AI";
-
-  // bubble
-  const bubble = document.createElement("div");
-  bubble.className = `message ${sender}`;
-  bubble.textContent = content;
-
-  // timestamp
-  const time = document.createElement("div");
-  time.className = "timestamp";
-  time.textContent = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
-  bubble.appendChild(time);
-
-  if (sender === "user") {
-    row.appendChild(bubble);
-    row.appendChild(avatar);
+  let avatarHTML = "";
+  if (role === "user") {
+    avatarHTML = `<div class="avatar user">Me</div>`;
+  } else if (role === "bot") {
+    avatarHTML = `<div class="avatar bot"></div>`; // styled via CSS, loads icons/icon.png
   } else {
-    row.appendChild(avatar);
-    row.appendChild(bubble);
+    avatarHTML = `<div class="avatar error">!</div>`; // fallback for errors/system
   }
 
-  chatWindow.appendChild(row);
+  const messageHTML = `
+    <div class="messageRow ${role}">
+      ${role === "bot" ? avatarHTML : ""}
+      <div>
+        <div class="message ${role}">${text}</div>
+        <div class="timestamp">${time}</div>
+      </div>
+      ${role === "user" ? avatarHTML : ""}
+    </div>
+  `;
+
+  chatWindow.innerHTML += messageHTML;
   scrollChatToBottom();
 
   // persist
   chrome.storage.local.set({ chatHistory: chatWindow.innerHTML });
 }
 
+// --- Show logged in UI ---
 function showLoggedInUI(email) {
   loggedIn = true;
   document.getElementById("loginContainer").style.display = "none";
@@ -59,9 +54,7 @@ function showLoggedInUI(email) {
 // --- Check existing session ---
 async function checkAuth() {
   try {
-    const res = await fetch(`${BASE_URL}/auths/me`, {
-      credentials: "include",
-    });
+    const res = await fetch(`${BASE_URL}/auths/me`, { credentials: "include" });
     if (res.ok) {
       const data = await res.json();
       showLoggedInUI(data?.email || "User");
@@ -78,7 +71,7 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
   const remember = document.getElementById("rememberMe").checked;
 
   if (!email || !password) {
-    renderMessage("Please enter email and password.", "error");
+    updateChatWindow("error", "Please enter email and password.");
     return;
   }
 
@@ -93,7 +86,7 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
     if (!res.ok) throw new Error("HTTP " + res.status);
 
     showLoggedInUI(email);
-    renderMessage("Logged in successfully. Nice to see you, how can I help?", "bot");
+    updateChatWindow("bot", "Logged in successfully. Nice to see you, how can I help?");
 
     if (remember) {
       chrome.storage.local.set({ savedEmail: email, savedPassword: password });
@@ -101,7 +94,7 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
       chrome.storage.local.remove(["savedEmail", "savedPassword"]);
     }
   } catch (err) {
-    renderMessage(`Login error: ${err.message}`, "error");
+    updateChatWindow("error", `Login error: ${err.message}`);
   }
 });
 
@@ -123,20 +116,24 @@ async function sendMessage() {
   const input = inputField.value.trim();
 
   if (!loggedIn) {
-    renderMessage("Please login first.", "error");
+    updateChatWindow("error", "Please login first.");
     return;
   }
   if (!input) return;
 
-  renderMessage(input, "user");
+  updateChatWindow("user", input);
   inputField.value = "";
 
+  // Thinking indicator
   const thinkingId = Date.now();
   const chatWindow = document.getElementById("chatWindow");
   const thinkingBubble = document.createElement("div");
   thinkingBubble.className = "messageRow bot";
   thinkingBubble.id = `thinking-${thinkingId}`;
-  thinkingBubble.innerHTML = `<div class="avatar">AI</div><div class="message bot">Typing...</div>`;
+  thinkingBubble.innerHTML = `
+    <div class="avatar bot"></div>
+    <div><div class="message bot">Typing...</div></div>
+  `;
   chatWindow.appendChild(thinkingBubble);
   scrollChatToBottom();
 
@@ -157,16 +154,15 @@ async function sendMessage() {
     const reply = data?.choices?.[0]?.message?.content || "[No reply received from backend]";
 
     document.getElementById(`thinking-${thinkingId}`)?.remove();
-    renderMessage(reply, "bot");
+    updateChatWindow("bot", reply);
   } catch (err) {
     document.getElementById(`thinking-${thinkingId}`)?.remove();
-    renderMessage(`Error: ${err.message}`, "error");
+    updateChatWindow("error", `Error: ${err.message}`);
   }
   inputField.focus();
 }
 
 document.getElementById("sendBtn").addEventListener("click", sendMessage);
-
 document.getElementById("input").addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
@@ -176,7 +172,7 @@ document.getElementById("input").addEventListener("keydown", (e) => {
 
 // --- New chat ---
 document.getElementById("newChatBtn").addEventListener("click", () => {
-  renderMessage("--- New Chat ---", "bot");
+  updateChatWindow("bot", "--- New Chat ---");
 });
 
 // --- Clear chat ---
@@ -204,7 +200,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
         if (res.ok) {
           showLoggedInUI(data.savedEmail);
-          renderMessage("Auto-login successful. Nice to see you, how can I help?", "bot");
+          updateChatWindow("bot", "Auto-login successful. Nice to see you, how can I help?");
         }
       } catch {}
     }
