@@ -7,6 +7,9 @@
   <body>
     <h3>Ask HelpdeskAI</h3>
 
+    <!-- Status -->
+    <div id="statusBar">Connected to HelpdeskAI</div>
+
     <!-- Chat Window -->
     <div id="chatWindow"></div>
 
@@ -18,7 +21,11 @@
 
     <!-- Input Row -->
     <div class="inputRow">
-      <input id="input" type="text" placeholder="Type your question..." />
+      <textarea
+        id="input"
+        placeholder="Type your question..."
+        rows="1"
+      ></textarea>
       <button id="sendBtn">Send</button>
     </div>
 

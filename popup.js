@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
       scrollChatToBottom();
     }
   });
+
+  // Focus input automatically
+  document.getElementById("input").focus();
 });
 
 // Scroll helper
@@ -35,6 +38,12 @@ async function sendMessage() {
   updateChatWindow(`<div class="message user">${input}</div>`);
   inputField.value = "";
 
+  // Typing indicator
+  const thinkingId = Date.now();
+  updateChatWindow(
+    `<div class="message bot" id="thinking-${thinkingId}">Typing...</div>`
+  );
+
   try {
     const res = await fetch(`${BASE_URL}/chat/completions`, {
       method: "POST",
@@ -52,25 +61,34 @@ async function sendMessage() {
     const reply =
       data?.choices?.[0]?.message?.content ||
       "[No reply received from backend]";
+
+    // Remove typing indicator
+    document.getElementById(`thinking-${thinkingId}`)?.remove();
+
+    // Append reply
     updateChatWindow(`<div class="message bot">${reply}</div>`);
   } catch (err) {
+    document.getElementById(`thinking-${thinkingId}`)?.remove();
     updateChatWindow(
       `<div class="message error">Error: ${err.message}</div>`
     );
   }
+
+  // Refocus for convenience
+  inputField.focus();
 }
 
 document.getElementById("sendBtn").addEventListener("click", sendMessage);
 
-// Allow Enter key to send
-document.getElementById("input").addEventListener("keypress", (e) => {
-  if (e.key === "Enter") {
+// Enter = Send, Shift+Enter = newline
+document.getElementById("input").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
     sendMessage();
   }
 });
 
-// New Chat (keeps storage, just adds divider)
+// New Chat (keeps history, adds divider)
 document.getElementById("newChatBtn").addEventListener("click", () => {
   updateChatWindow(
     `<div class="message bot" style="text-align:center; width:100%; background:#eee; color:#555; border-radius:6px;">--- New Chat ---</div>`
