@@ -188,3 +188,57 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 });
+
+
+// --- Dark Mode Toggle ---
+const darkModeBtn = document.getElementById("darkModeBtn");
+const darkModeIcon = document.getElementById("darkModeIcon");
+
+if (darkModeBtn && darkModeIcon) {
+  // Load saved theme
+  chrome.storage.local.get("theme", (data) => {
+    if (data.theme === "dark") {
+      document.body.classList.add("dark-mode");
+      darkModeIcon.src = "icons/sun.png"; // show sun when dark
+    } else {
+      darkModeIcon.src = "icons/moon.png"; // show moon when light
+    }
+  });
+
+  darkModeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+
+    if (document.body.classList.contains("dark-mode")) {
+      darkModeIcon.src = "icons/sun.png"; // switch to sun
+      chrome.storage.local.set({ theme: "dark" });
+    } else {
+      darkModeIcon.src = "icons/moon.png"; // switch to moon
+      chrome.storage.local.set({ theme: "light" });
+    }
+  });
+}
+
+
+const themeToggle = document.getElementById("toggle_checkbox");
+
+// Load saved theme on startup
+chrome.storage.local.get("theme", (data) => {
+  if (data.theme === "dark") {
+    document.body.classList.add("dark-mode");
+    themeToggle.checked = true; // show moon
+  } else {
+    document.body.classList.remove("dark-mode");
+    themeToggle.checked = false; // show sun
+  }
+});
+
+// Listen for toggle changes
+themeToggle.addEventListener("change", () => {
+  if (themeToggle.checked) {
+    document.body.classList.add("dark-mode");
+    chrome.storage.local.set({ theme: "dark" });
+  } else {
+    document.body.classList.remove("dark-mode");
+    chrome.storage.local.set({ theme: "light" });
+  }
+});

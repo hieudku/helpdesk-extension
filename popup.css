@@ -5,6 +5,7 @@ body {
   width: 420px;
   color: #333;
   box-sizing: border-box;
+  margin: 0;
 }
 
 h3 {
@@ -90,7 +91,7 @@ button.smallBtn {
   margin-left: 8px;
 }
 
-/* Chat styling remains unchanged below */
+/* Chat area */
 #chatWindow {
   margin-top: 12px;
   padding: 10px;
@@ -156,17 +157,11 @@ button.smallBtn {
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* button style */
+/* Buttons */
 button {
   font-weight: bold;
   background: linear-gradient(90deg, #0078d7, #005a9e);
@@ -190,15 +185,167 @@ button:disabled {
   transform: none;
 }
 
-/* Small buttons - Logout */
-button.smallBtn {
-  font-size: 12px;
-  padding: 6px 10px;
-  margin-left: 8px;
+/* =====================
+   SUN/MOON TOGGLE
+   ===================== */
+#themeToggle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  transform: scale(0.6);
 }
 
-/* Full width for Login button */
-#loginBtn {
-  width: 100%;
-  margin-top: 10px;
+#toggle_checkbox {
+  display: none;
+}
+
+#themeToggle label {
+  display: block;
+  width: 116px;
+  height: 56px;
+  background-color: #77b5fe;
+  border-radius: 56px;
+  cursor: pointer;
+  transition: 0.3s ease background-color;
+  overflow: hidden;
+  position: relative;
+}
+
+#star {
+  position: absolute;
+  top: 13px;
+  left: 13px;
+  width: 30px;
+  height: 30px;
+  background-color: #fafd0f;
+  border-radius: 50%;
+  transition: 0.3s ease top, 0.3s ease left, 0.3s ease transform, 0.3s ease background-color;
+  z-index: 1;
+}
+
+#star-1 {
+  position: relative;
+}
+
+#star-2 {
+  position: absolute;
+  transform: rotateZ(36deg);
+}
+
+.sun-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.star {
+  top: 0;
+  left: -7px;
+  font-size: 54px;
+  line-height: 28px;
+  color: #fafd0f;
+  transition: 0.3s ease color;
+}
+
+#moon {
+  position: absolute;
+  bottom: -52px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: 0.3s ease bottom;
+}
+
+#moon:before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: -17px;
+  width: 40px;
+  height: 40px;
+  background-color:#03a9f4;
+  border-radius: 50%;
+  transition: 0.3s ease background-color;
+}
+
+#toggle_checkbox:checked + label {
+  background-color: #000;
+}
+
+#toggle_checkbox:checked + label #star {
+  top: 3px;
+  left: 64px;
+  transform: scale(0.3);
+  background-color: yellow;
+}
+
+#toggle_checkbox:checked + label .star {
+  color: yellow;
+}
+
+#toggle_checkbox:checked + label #moon {
+  bottom: 8px;
+}
+
+#toggle_checkbox:checked + label #moon:before {
+  background-color: #000;
+}
+
+
+/* =====================
+   DARK MODE THEME (triggered by .dark-mode)
+   ===================== */
+body.dark-mode {
+  background: #1e1e1e !important;
+  color: #eee !important;
+}
+
+body.dark-mode h3 {
+  color: #4aa3ff;
+  border-bottom: 1px solid #444;
+}
+
+body.dark-mode #loginContainer {
+  background: #2c2c2c;
+  border: 1px solid #444;
+}
+
+body.dark-mode #loginSection input[type="text"],
+body.dark-mode #loginSection input[type="password"] {
+  background: #333;
+  border: 1px solid #555;
+  color: #eee;
+}
+
+body.dark-mode #loginSection input::placeholder {
+  color: #aaa;
+}
+
+body.dark-mode #chatWindow {
+  background: #2c2c2c;
+  border: 1px solid #444;
+  color: #ddd;
+}
+
+body.dark-mode .user {
+  background: #4aa3ff;
+  color: #fff;
+}
+
+body.dark-mode .bot {
+  background: #3a3a3a;
+  color: #eee;
+}
+
+body.dark-mode .error {
+  background: #5c2c2c;
+  color: #ffb3b3;
+}
+
+body.dark-mode #input {
+  background: #333;
+  color: #eee;
+  border: 1px solid #555;
 }
