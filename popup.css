@@ -1,227 +1,246 @@
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: #f4f6f9;
-  padding: 15px;
   width: 420px;
   color: #333;
-  box-sizing: border-box;
   margin: 0;
-}
-
-h3 {
-  margin: 10px 0;
-  font-size: 16px;
-  color: #0078d7;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 4px;
-}
-
-/* Login box */
-#loginContainer {
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: #fff;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-#loginSection label {
-  display: block;
-  font-size: 13px;
-  color: #555;
-  margin-top: 8px;
-  margin-bottom: 4px;
-}
-
-#loginSection input[type="text"],
-#loginSection input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  margin-bottom: 10px;
+  padding: 0;
   box-sizing: border-box;
+  transition: background 0.3s, color 0.3s;
 }
 
-#loginSection input:focus {
-  border-color: #0078d7;
-  outline: none;
-  box-shadow: 0 0 4px rgba(0, 120, 215, 0.3);
+/* =====================
+   HEADER BAR
+   ===================== */
+#headerBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 8px 12px;
+  border-bottom: 1px solid #ddd;
 }
 
-#loginBtn {
-  width: 100%;
-  margin-top: 10px;
-  background: linear-gradient(90deg, #0078d7, #005a9e);
-  border: none;
-  color: #fff;
-  font-size: 14px;
-  font-weight: bold;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-#loginBtn:hover {
-  background: linear-gradient(90deg, #005a9e, #00447a);
-}
-
-.rememberRow {
+#headerLeft {
   display: flex;
   align-items: center;
-  font-size: 12px;
-  margin-top: -5px;
+  gap: 8px;
 }
 
-.rememberRow input {
-  margin-right: 6px;
+#headerRight {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* space between logout and toggle */
 }
 
+/* Status bar */
 #statusBar {
   font-size: 12px;
   color: #28a745;
-  margin-bottom: 6px;
+  margin: 8px 12px;
 }
 
-button.smallBtn {
-  font-size: 12px;
-  padding: 4px 8px;
-  margin-left: 8px;
-}
-
-/* Chat area */
+/* Chat Window */
 #chatWindow {
-  margin-top: 12px;
+  margin: 10px 12px;
   padding: 10px;
   border: 1px solid #e1e1e1;
-  border-radius: 6px;
-  background: #fff;
-  height: 250px;
+  border-radius: 10px;
+  background: #fafafa;
+  height: 260px;
   overflow-y: auto;
   font-size: 14px;
-  color: #444;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Chat controls */
+.chatControls {
+  display: flex;
+  justify-content:flex-end;   
+  gap: 8px;                    
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.chatControls button {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #0078d7;
+  background: #fff;
+  color: #0078d7;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.chatControls button:hover:enabled {
+  background: #0078d7;
+  color: #fff;
+}
+
+.chatControls button:disabled {
+  background: #f1f1f1;
+  color: #999;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Messages with avatars */
+.messageRow {
+  display: flex;
+  align-items: flex-end;
+  margin: 6px 0;
+}
+
+.messageRow.user {
+  justify-content: flex-end;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #0078d7;
+  color: #fff;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 6px;
 }
 
 .message {
-  margin: 6px 0;
   padding: 8px 12px;
-  border-radius: 12px;
-  max-width: 80%;
-  clear: both;
-  display: inline-block;
+  border-radius: 14px;
+  max-width: 70%;
   word-wrap: break-word;
   animation: fadeIn 0.2s ease-in-out;
 }
 
-.user {
+.message.user {
   background: #0078d7;
   color: #fff;
-  float: right;
-  text-align: right;
+  border-bottom-right-radius: 4px;
 }
 
-.bot {
+.message.bot {
   background: #f1f1f1;
-  float: left;
-  text-align: left;
+  color: #333;
+  border-bottom-left-radius: 4px;
 }
 
-.error {
-  background: #fdd;
-  color: #900;
-  float: left;
+.timestamp {
+  font-size: 10px;
+  color: #999;
+  margin-top: 2px;
 }
 
+/* Input row */
 .inputRow {
   display: flex;
   gap: 6px;
-  margin-top: 10px;
+  padding: 8px 12px;
+  border-top: 1px solid #ddd;
+  background: #fff;
 }
 
 #input {
   flex: 1;
   font-size: 14px;
-  border-radius: 6px;
+  border-radius: 20px;
   border: 1px solid #ccc;
-  padding: 8px;
+  padding: 8px 12px;
   resize: none;
 }
 
-.chatControls {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(5px); }
-  to   { opacity: 1; transform: translateY(0); }
+#input:focus {
+  border-color: #0078d7;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 120, 215, 0.2);
 }
 
 /* Buttons */
 button {
   font-weight: bold;
-  background: linear-gradient(90deg, #0078d7, #005a9e);
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
   border: none;
   border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
 }
 
-button:hover:enabled {
+button.primary {
+  background: linear-gradient(90deg, #0078d7, #005a9e);
+  color: #fff;
+}
+
+button.primary:hover:enabled {
   background: linear-gradient(90deg, #005a9e, #00447a);
-  transform: translateY(-1px);
 }
 
-button:disabled {
-  background-color: #aaa;
-  cursor: not-allowed;
-  transform: none;
+button.secondary {
+  background: transparent;
+  border: 1px solid #0078d7;
+  color: #0078d7;
 }
 
-/* send btn */
+button.secondary:hover {
+  background: #0078d7;
+  color: #fff;
+}
+
+/* Send button with icon */
 #sendBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(90deg, #0078d7, #005a9e);
-  border: none;
-  border-radius: 6px;
+  background: #0078d7;
+  border-radius: 50%;
   padding: 8px;
-  cursor: pointer;
+  width: 36px;
+  height: 36px;
 }
 
 #sendBtn img.send-icon {
-  width: 18px;   
-  height: 18px;
+  width: 16px;
+  height: 16px;
   object-fit: contain;
 }
 
-#sendBtn:hover:enabled {
-  background: linear-gradient(90deg, #005a9e, #00447a);
-  transform: translateY(-1px);
+#sendBtn:disabled {
+  background: #aaa;
+  cursor: not-allowed;
 }
 
-#sendBtn:disabled {
-  background-color: #aaa;
-  cursor: not-allowed;
-  transform: none;
+/* Dark Mode Overrides */
+body.dark-mode {
+  background: #1e1e1e;
+  color: #eee;
 }
+
+body.dark-mode #headerBar {
+  background: #2c2c2c;
+  border-bottom: 1px solid #444;
+}
+
+body.dark-mode #chatWindow {
+  background: #2c2c2c;
+  border: 1px solid #444;
+}
+
+body.dark-mode .message.bot {
+  background: #3a3a3a;
+  color: #eee;
+}
+
 
 
 /* =====================
    SUN/MOON TOGGLE
    ===================== */
 #themeToggle {
-  position: absolute;
-  top: 8px;
-  right: 8px;
+  position: relative;
   transform: scale(0.6);
 }
 
@@ -321,61 +340,4 @@ button:disabled {
 
 #toggle_checkbox:checked + label #moon:before {
   background-color: #000;
-}
-
-
-/* =====================
-   DARK MODE THEME (triggered by .dark-mode)
-   ===================== */
-body.dark-mode {
-  background: #1e1e1e !important;
-  color: #eee !important;
-}
-
-body.dark-mode h3 {
-  color: #4aa3ff;
-  border-bottom: 1px solid #444;
-}
-
-body.dark-mode #loginContainer {
-  background: #2c2c2c;
-  border: 1px solid #444;
-}
-
-body.dark-mode #loginSection input[type="text"],
-body.dark-mode #loginSection input[type="password"] {
-  background: #333;
-  border: 1px solid #555;
-  color: #eee;
-}
-
-body.dark-mode #loginSection input::placeholder {
-  color: #aaa;
-}
-
-body.dark-mode #chatWindow {
-  background: #2c2c2c;
-  border: 1px solid #444;
-  color: #ddd;
-}
-
-body.dark-mode .user {
-  background: #4aa3ff;
-  color: #fff;
-}
-
-body.dark-mode .bot {
-  background: #3a3a3a;
-  color: #eee;
-}
-
-body.dark-mode .error {
-  background: #5c2c2c;
-  color: #ffb3b3;
-}
-
-body.dark-mode #input {
-  background: #333;
-  color: #eee;
-  border: 1px solid #555;
 }

@@ -7,19 +7,50 @@ function scrollChatToBottom() {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-function updateChatWindow(content) {
+function renderMessage(content, sender = "bot") {
   const chatWindow = document.getElementById("chatWindow");
-  chatWindow.innerHTML += content;
+
+  const row = document.createElement("div");
+  row.className = `messageRow ${sender}`;
+
+  // avatar
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  avatar.textContent = sender === "user" ? "You" : "AI";
+
+  // bubble
+  const bubble = document.createElement("div");
+  bubble.className = `message ${sender}`;
+  bubble.textContent = content;
+
+  // timestamp
+  const time = document.createElement("div");
+  time.className = "timestamp";
+  time.textContent = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+  bubble.appendChild(time);
+
+  if (sender === "user") {
+    row.appendChild(bubble);
+    row.appendChild(avatar);
+  } else {
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+  }
+
+  chatWindow.appendChild(row);
   scrollChatToBottom();
+
+  // persist
   chrome.storage.local.set({ chatHistory: chatWindow.innerHTML });
 }
 
 function showLoggedInUI(email) {
   loggedIn = true;
   document.getElementById("loginContainer").style.display = "none";
-
-  document.getElementById("welcomeBar").style.display = "block";
-  document.getElementById("welcomeMsg").textContent = `Hi, ${email}`;
+  document.getElementById("logoutBtn").style.display = "inline-block";
+  document.getElementById("statusBar").textContent = `Connected as ${email}`;
+  document.getElementById("statusBar").style.color = "#28a745";
 
   document.getElementById("input").disabled = false;
   document.getElementById("sendBtn").disabled = false;
@@ -47,9 +78,7 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
   const remember = document.getElementById("rememberMe").checked;
 
   if (!email || !password) {
-    updateChatWindow(
-      `<div class="message error">Please enter email and password.</div>`
-    );
+    renderMessage("Please enter email and password.", "error");
     return;
   }
 
@@ -64,18 +93,15 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
     if (!res.ok) throw new Error("HTTP " + res.status);
 
     showLoggedInUI(email);
-    updateChatWindow(`<div class="message bot">Logged in successfully. Nice to see you, how can I help?</div>`);
+    renderMessage("Logged in successfully. Nice to see you, how can I help?", "bot");
 
-    // Save credentials only if remember is checked
     if (remember) {
       chrome.storage.local.set({ savedEmail: email, savedPassword: password });
     } else {
       chrome.storage.local.remove(["savedEmail", "savedPassword"]);
     }
   } catch (err) {
-    updateChatWindow(
-      `<div class="message error">Login error: ${err.message}</div>`
-    );
+    renderMessage(`Login error: ${err.message}`, "error");
   }
 });
 
@@ -97,18 +123,22 @@ async function sendMessage() {
   const input = inputField.value.trim();
 
   if (!loggedIn) {
-    updateChatWindow(`<div class="message error">Please login first.</div>`);
+    renderMessage("Please login first.", "error");
     return;
   }
   if (!input) return;
 
-  updateChatWindow(`<div class="message user">${input}</div>`);
+  renderMessage(input, "user");
   inputField.value = "";
 
   const thinkingId = Date.now();
-  updateChatWindow(
-    `<div class="message bot" id="thinking-${thinkingId}">Typing...</div>`
-  );
+  const chatWindow = document.getElementById("chatWindow");
+  const thinkingBubble = document.createElement("div");
+  thinkingBubble.className = "messageRow bot";
+  thinkingBubble.id = `thinking-${thinkingId}`;
+  thinkingBubble.innerHTML = `<div class="avatar">AI</div><div class="message bot">Typing...</div>`;
+  chatWindow.appendChild(thinkingBubble);
+  scrollChatToBottom();
 
   try {
     const res = await fetch(`${BASE_URL}/chat/completions`, {
@@ -124,23 +154,19 @@ async function sendMessage() {
     if (!res.ok) throw new Error("HTTP " + res.status);
 
     const data = await res.json();
-    const reply =
-      data?.choices?.[0]?.message?.content || "[No reply received from backend]";
+    const reply = data?.choices?.[0]?.message?.content || "[No reply received from backend]";
 
     document.getElementById(`thinking-${thinkingId}`)?.remove();
-    updateChatWindow(`<div class="message bot">${reply}</div>`);
+    renderMessage(reply, "bot");
   } catch (err) {
     document.getElementById(`thinking-${thinkingId}`)?.remove();
-    updateChatWindow(
-      `<div class="message error">Error: ${err.message}</div>`
-    );
+    renderMessage(`Error: ${err.message}`, "error");
   }
   inputField.focus();
 }
 
 document.getElementById("sendBtn").addEventListener("click", sendMessage);
 
-// Enter = Send, Shift+Enter = newline
 document.getElementById("input").addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
@@ -150,9 +176,7 @@ document.getElementById("input").addEventListener("keydown", (e) => {
 
 // --- New chat ---
 document.getElementById("newChatBtn").addEventListener("click", () => {
-  updateChatWindow(
-    `<div class="message bot" style="text-align:center; width:100%; background:#eee; color:#555; border-radius:6px;">--- New Chat ---</div>`
-  );
+  renderMessage("--- New Chat ---", "bot");
 });
 
 // --- Clear chat ---
@@ -169,10 +193,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       scrollChatToBottom();
     }
 
-    // First try cookie/session
     const ok = await checkAuth();
     if (!ok && data.savedEmail && data.savedPassword) {
-      // Auto re-login if saved credentials exist
       try {
         const res = await fetch(`${BASE_URL}/auths/signin`, {
           method: "POST",
@@ -182,57 +204,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
         if (res.ok) {
           showLoggedInUI(data.savedEmail);
-          updateChatWindow(`<div class="message bot">Auto-login successful. \n Nice to see you, how can I help?</div>`);
+          renderMessage("Auto-login successful. Nice to see you, how can I help?", "bot");
         }
       } catch {}
     }
   });
 });
 
-
 // --- Dark Mode Toggle ---
-const darkModeBtn = document.getElementById("darkModeBtn");
-const darkModeIcon = document.getElementById("darkModeIcon");
-
-if (darkModeBtn && darkModeIcon) {
-  // Load saved theme
-  chrome.storage.local.get("theme", (data) => {
-    if (data.theme === "dark") {
-      document.body.classList.add("dark-mode");
-      darkModeIcon.src = "icons/sun.png"; // show sun when dark
-    } else {
-      darkModeIcon.src = "icons/moon.png"; // show moon when light
-    }
-  });
-
-  darkModeBtn.addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
-
-    if (document.body.classList.contains("dark-mode")) {
-      darkModeIcon.src = "icons/sun.png"; // switch to sun
-      chrome.storage.local.set({ theme: "dark" });
-    } else {
-      darkModeIcon.src = "icons/moon.png"; // switch to moon
-      chrome.storage.local.set({ theme: "light" });
-    }
-  });
-}
-
-
 const themeToggle = document.getElementById("toggle_checkbox");
 
-// Load saved theme on startup
 chrome.storage.local.get("theme", (data) => {
   if (data.theme === "dark") {
     document.body.classList.add("dark-mode");
-    themeToggle.checked = true; // show moon
+    themeToggle.checked = true;
   } else {
     document.body.classList.remove("dark-mode");
-    themeToggle.checked = false; // show sun
+    themeToggle.checked = false;
   }
 });
 
-// Listen for toggle changes
 themeToggle.addEventListener("change", () => {
   if (themeToggle.checked) {
     document.body.classList.add("dark-mode");
