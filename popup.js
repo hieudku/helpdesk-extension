@@ -64,7 +64,7 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
     if (!res.ok) throw new Error("HTTP " + res.status);
 
     showLoggedInUI(email);
-    updateChatWindow(`<div class="message bot">Logged in successfully.</div>`);
+    updateChatWindow(`<div class="message bot">Logged in successfully. Nice to see you, how can I help?</div>`);
 
     // Save credentials only if remember is checked
     if (remember) {
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
         if (res.ok) {
           showLoggedInUI(data.savedEmail);
-          updateChatWindow(`<div class="message bot">🔑 Auto-login successful.</div>`);
+          updateChatWindow(`<div class="message bot">Auto-login successful. \n Nice to see you, how can I help?</div>`);
         }
       } catch {}
     }
